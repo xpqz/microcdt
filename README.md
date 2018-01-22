@@ -38,7 +38,9 @@ pip install microcdt
 
 Sometimes, using a client library that someone else wrote to talk to an HTTP service API is overkill. Perhaps you're just writing a one-off script, or perhaps you only need access to a tiny subset of the API. Sometimes you just want the control over how things are done that can only come from "rolling your own".
 
-The aim of this article is to show how you can create a simple library to access Cloudant's HTTP API, relying only on a library for making HTTP requests.
+Glynn Bird wrote an excellent article on the different types of [abstraction levels](https://medium.com/ibm-watson-data-lab/choosing-a-cloudant-library-d14c06f3d714) that client libraries can offer, using Node as the example language.
+
+The aim of this repo is to show how you can create a simple library yourself to access Cloudant's HTTP API, relying only on a library for making HTTP requests.
 
 Cloudant's API is all HTTP(S), and pretty much all programming languages have decent support for making HTTP requests. It's particularly slick in languages such as Python and Node. Python's [requests](http://docs.python-requests.org/en/master/) library kind of started the trend of super-friendly HTTP libraries, and it now has analogues in most other languages, too.
 
