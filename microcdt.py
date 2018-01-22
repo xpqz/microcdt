@@ -13,6 +13,25 @@ class Cloudant(requests.Session):
         requests.Session.__init__(self, **kwargs)
         self.baseurl = baseurl + "/{}"
 
+    def create_database(self, dbname):
+        """
+        Create a new database. Requires account credentials, not API key
+        See https://console.bluemix.net/docs/services/Cloudant/api/database.html#create
+        """
+        response = self.put(self.baseurl.format(dbname))
+        response.raise_for_status()
+
+        return response.json()
+
+    def delete_database(self, dbname):
+        """
+        Delete a database. Requires account credentials, not API key
+        See https://console.bluemix.net/docs/services/Cloudant/api/database.html#deleting-a-database        """
+        response = self.delete(self.baseurl.format(dbname))
+        response.raise_for_status()
+
+        return response.json()
+
     def all_docs(self, dbname):
         """
         Return all docs for the given database
@@ -58,7 +77,7 @@ class Cloudant(requests.Session):
         """
         Create a new document. Implemented via bulk_docs
         """
-        return self.bulk_docs(dbname, [doc])
+        return self.bulk_docs(dbname, [doc])[0]
 
     def delete_doc(self, dbname, doc_id, rev_id):
         """
@@ -67,7 +86,7 @@ class Cloudant(requests.Session):
         return self.bulk_docs(
             dbname,
             [{"_id": doc_id, "_rev": rev_id, "_deleted": True}]
-        )
+        )[0]
 
     def update_doc(self, dbname, doc_id, rev_id, new_body):
         """
@@ -75,4 +94,4 @@ class Cloudant(requests.Session):
         """
         new_body['_id'] = doc_id
         new_body['_rev'] = rev_id
-        return self.bulk_docs(dbname, [new_body])
+        return self.bulk_docs(dbname, [new_body])[0]
