@@ -28,6 +28,12 @@ result = cdt.create_doc(db, {'name': 'adam'})
 cdt.delete_database(db)
 ```
 
+## Install
+
+```
+pip install microcdt
+```
+
 ## Should you use a client library or "roll your own"?
 
 Sometimes, using a client library that someone else wrote to talk to an HTTP service API is overkill. Perhaps you're just writing a one-off script, or perhaps you only need access to a tiny subset of the API. Sometimes you just want the control over how things are done that can only come from "rolling your own".
@@ -156,5 +162,3 @@ The wins are:
 1. You can ensure you only get exactly what you need (no bloat).
 1. You know exactly how it works, as you wrote it.
 1. You gain understanding of the API you're targeting
-
-My code above is available on [github](https://github.com/xpqz/microcdt). No, it's not officially supported :)
