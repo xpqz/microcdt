@@ -96,5 +96,29 @@ class TestBasics(unittest.TestCase):
         docs = self.cdt.all_docs(self.database)
         self.assertTrue(len(docs) >= len(data))
 
+    def test_view_query(self):
+        """
+        Test that we can read from a view.
+        """
+        view = {
+            "_id": "_design/testddoc",
+            "views": {
+                "testview": {
+                    "reduce": "_sum",
+                    "map": "function (doc) {\n  if (doc && doc.field) {\n    emit(doc.field, 1);\n  }\n}"
+                }
+            },
+            "language": "javascript"
+        }
+
+        self.cdt.bulk_docs(
+            self.database,
+            [view, {'field': 'adam'}, {'field': 'bob'}, {'field': 'charlotte'}]
+        )
+
+        result = self.cdt.view_query(self.database, 'testddoc', 'testview')
+
+        self.assertEqual(result[0]['value'], 3)
+
 if __name__ == '__main__':
     unittest.main()

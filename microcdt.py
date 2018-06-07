@@ -95,3 +95,27 @@ class Cloudant(requests.Session):
         new_body['_id'] = doc_id
         new_body['_rev'] = rev_id
         return self.bulk_docs(dbname, [new_body])[0]
+
+    def view_query(self, dbname, ddoc, view_name, params={}):
+        """
+        Query a view.
+        See https://console.bluemix.net/docs/services/Cloudant/api/using_views.html#using-views
+        """
+        path = "{}/_design/{}/_view/{}".format(dbname, ddoc, view_name)
+        response = None
+        if "keys" in params:
+            keys = params["keys"]
+            del params["keys"]
+            response = self.post(
+                self.baseurl.format(path),
+                params=params,
+                json={"keys": keys}
+            )
+        else:
+            response = self.get(
+                self.baseurl.format(path),
+                params=params
+            )
+        response.raise_for_status()
+
+        return response.json()["rows"]
